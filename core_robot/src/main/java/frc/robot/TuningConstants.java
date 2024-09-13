@@ -54,8 +54,6 @@ public class TuningConstants
 
     //================================================= Macros/Vision ======================================================
 
-    public static final double VISION_ODOMETRY_ACCURACY_TRESHOLD_RANGE = 30;
-    public static final boolean SDSDRIVETRAIN_USE_VISION = true;
 
     //=========================================== 2024 AprilTag Location guide ==============================================
     //// | TAG                                 |  ID  |    X    |    Y    |   Z    | THETA |

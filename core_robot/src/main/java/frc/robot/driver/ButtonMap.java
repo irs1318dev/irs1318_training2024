@@ -89,20 +89,6 @@ public class ButtonMap implements IButtonMap
             TuningConstants.SDSDRIVETRAIN_DEAD_ZONE_TURN),
 
         // wrist Operation
-        new AnalogOperationDescription(
-            AnalogOperation.WristAngleAdjustment,
-            UserInputDevice.Codriver,
-            AnalogAxis.XBONE_LSY,
-            ElectronicsConstants.INVERT_XBONE_LEFT_Y_AXIS,
-            TuningConstants.WRIST_DEADZONE),
-
-        new AnalogOperationDescription(
-            AnalogOperation.IntakeMotorVelocityGoal,
-            TuningConstants.MAGIC_NULL_VALUE),
-
-        new AnalogOperationDescription(
-            AnalogOperation.WristSetAngle,
-            TuningConstants.MAGIC_NULL_VALUE),
     };
 
     public static DigitalOperationDescription[] DigitalOperationSchema = new DigitalOperationDescription[]
@@ -159,59 +145,9 @@ public class ButtonMap implements IButtonMap
             ButtonType.Simple),
 
         // Vision test operations:
-        new DigitalOperationDescription(
-            DigitalOperation.VisionFindAnyAprilTag,
-            UserInputDevice.Test1,
-            UserInputDeviceButton.XBONE_B_BUTTON,
-            ButtonType.Toggle),
-        new DigitalOperationDescription(
-            DigitalOperation.VisionFindAbsolutePosition,
-            UserInputDevice.Test1,
-            UserInputDeviceButton.XBONE_X_BUTTON,
-            ButtonType.Simple),
 
         // Wrist operations:
-        new DigitalOperationDescription(
-            DigitalOperation.IntakeIn,
-            UserInputDevice.Driver,
-            UserInputDeviceButton.XBONE_A_BUTTON,
-            EnumSet.noneOf(Shift.class),
-            EnumSet.noneOf(Shift.class),
-            ButtonType.Simple),
-        new DigitalOperationDescription(
-            DigitalOperation.IntakeOut,
-            UserInputDevice.Driver,
-            UserInputDeviceButton.XBONE_B_BUTTON,
-            EnumSet.of(Shift.DriverDebug),
-            EnumSet.noneOf(Shift.class),
-            ButtonType.Simple),
-        new DigitalOperationDescription(
-            DigitalOperation.IntakeOutSlow,
-            UserInputDevice.Driver,
-            UserInputDeviceButton.XBONE_B_BUTTON,
-            EnumSet.of(Shift.DriverDebug),
-            EnumSet.of(Shift.DriverDebug),
-            ButtonType.Simple),
-
-        new DigitalOperationDescription(
-            DigitalOperation.WristEnableSimpleMode,
-            UserInputDevice.Codriver,
-            UserInputDeviceButton.XBONE_X_BUTTON,
-            ButtonType.Simple),
-        new DigitalOperationDescription(
-            DigitalOperation.WristDisableSimpleMode,
-            UserInputDevice.Codriver,
-            UserInputDeviceButton.XBONE_Y_BUTTON,
-            EnumSet.of(Shift.CodriverDebug),
-            EnumSet.noneOf(Shift.class),
-            ButtonType.Simple),
-        new DigitalOperationDescription(
-            DigitalOperation.IntakeOutSuperSlow,
-            UserInputDevice.Codriver,
-            UserInputDeviceButton.XBONE_Y_BUTTON,
-            EnumSet.of(Shift.CodriverDebug),
-            EnumSet.of(Shift.CodriverDebug),
-            ButtonType.Simple),
+        
     };
 
     public static MacroOperationDescription[] MacroSchema = new MacroOperationDescription[]
@@ -371,78 +307,7 @@ public class ButtonMap implements IButtonMap
         //     }),
 
         // Wrist Operations
-        new MacroOperationDescription(
-            MacroOperation.LowCubeDrop,
-            UserInputDevice.Driver,
-            180,
-            EnumSet.of(Shift.DriverDebug),
-            EnumSet.noneOf(Shift.class),
-            ButtonType.Toggle,
-            () -> new WristPositionTask(TuningConstants.LOW_CUBE_DROP_POSITION),
-            new IOperation[]
-            {
-                AnalogOperation.WristSetAngle
-            }),
-        new MacroOperationDescription(
-            MacroOperation.MidCubeDrop,
-            UserInputDevice.Driver,
-            270,
-            EnumSet.of(Shift.DriverDebug),
-            EnumSet.noneOf(Shift.class),
-            ButtonType.Toggle,
-            () -> new WristPositionTask(TuningConstants.MID_CUBE_DROP_POSITION),
-            new IOperation[]
-            {
-                AnalogOperation.WristSetAngle
-            }),
-        new MacroOperationDescription(
-            MacroOperation.HighCubeDrop,
-            UserInputDevice.Driver,
-            0,
-            EnumSet.of(Shift.DriverDebug),
-            EnumSet.noneOf(Shift.class),
-            ButtonType.Toggle,
-            () -> new WristPositionTask(TuningConstants.HIGH_CUBE_DROP_POSITION),
-            new IOperation[]
-            {
-                AnalogOperation.WristSetAngle
-            }),
-        new MacroOperationDescription(
-            MacroOperation.WristStowed,
-            UserInputDevice.Driver,
-            90,
-            EnumSet.of(Shift.DriverDebug),
-            EnumSet.noneOf(Shift.class),
-            ButtonType.Toggle,
-            () -> new WristPositionTask(TuningConstants.STOWED_POSITION),
-            new IOperation[]
-            {
-                AnalogOperation.WristSetAngle
-            }),
-        new MacroOperationDescription(
-            MacroOperation.GroundPickup,
-            UserInputDevice.Driver,
-            UserInputDeviceButton.XBONE_RIGHT_BUTTON,
-            EnumSet.of(Shift.DriverDebug),
-            EnumSet.noneOf(Shift.class),
-            ButtonType.Toggle,
-            () -> new WristPositionTask(TuningConstants.GROUND_CUBE_PICKUP),
-            new IOperation[]
-            {
-                AnalogOperation.WristSetAngle
-            }),
-        new MacroOperationDescription(
-            MacroOperation.SubstationPickup,
-            UserInputDevice.Driver,
-            UserInputDeviceButton.XBONE_RIGHT_BUTTON,
-            EnumSet.of(Shift.DriverDebug),
-            EnumSet.of(Shift.DriverDebug),
-            ButtonType.Toggle,
-            () -> new WristPositionTask(TuningConstants.SUBSTATION_CUBE_PICKUP),
-            new IOperation[]
-            {
-                AnalogOperation.WristSetAngle
-            }),
+        
 
         // new MacroOperationDescription(
         //     MacroOperation.FollowPathTest1,
@@ -561,11 +426,7 @@ public class ButtonMap implements IButtonMap
             DigitalOperation.DriveTrainEnableFieldOrientation,
             DigitalOperation.DriveTrainDisableFieldOrientation,
             DigitalOperation.DriveTrainUseRobotOrientation,
-            DigitalOperation.VisionEnableStream,
-            DigitalOperation.VisionFindSpecificAprilTag,
-            DigitalOperation.VisionFindAnyAprilTag,
-            DigitalOperation.VisionFindAbsolutePosition,
-            DigitalOperation.VisionForceDisable,
+            
         }),
 
 
@@ -706,11 +567,7 @@ public class ButtonMap implements IButtonMap
                     DigitalOperation.DriveTrainEnableFieldOrientation,
                     DigitalOperation.DriveTrainDisableFieldOrientation,
                     DigitalOperation.DriveTrainUseRobotOrientation,
-                    DigitalOperation.VisionEnableStream,
-                    DigitalOperation.VisionFindSpecificAprilTag,
-                    DigitalOperation.VisionFindAnyAprilTag,
-                    DigitalOperation.VisionFindAbsolutePosition,
-                    DigitalOperation.VisionForceDisable,
+                    
                 }),
 
         new MacroOperationDescription(
@@ -778,11 +635,7 @@ public class ButtonMap implements IButtonMap
                     DigitalOperation.DriveTrainEnableFieldOrientation,
                     DigitalOperation.DriveTrainDisableFieldOrientation,
                     DigitalOperation.DriveTrainUseRobotOrientation,
-                    DigitalOperation.VisionEnableStream,
-                    DigitalOperation.VisionFindSpecificAprilTag,
-                    DigitalOperation.VisionFindAnyAprilTag,
-                    DigitalOperation.VisionFindAbsolutePosition,
-                    DigitalOperation.VisionForceDisable,
+                    
                 }),
 
 
@@ -846,11 +699,7 @@ public class ButtonMap implements IButtonMap
             DigitalOperation.DriveTrainEnableFieldOrientation,
             DigitalOperation.DriveTrainDisableFieldOrientation,
             DigitalOperation.DriveTrainUseRobotOrientation,
-            DigitalOperation.VisionEnableStream,
-            DigitalOperation.VisionFindSpecificAprilTag,
-            DigitalOperation.VisionFindAnyAprilTag,
-            DigitalOperation.VisionFindAbsolutePosition,
-            DigitalOperation.VisionForceDisable,
+           
         }),
 
 
@@ -899,11 +748,7 @@ public class ButtonMap implements IButtonMap
                 DigitalOperation.DriveTrainEnableFieldOrientation,
                 DigitalOperation.DriveTrainDisableFieldOrientation,
                 DigitalOperation.DriveTrainUseRobotOrientation,
-                DigitalOperation.VisionEnableStream,
-                DigitalOperation.VisionFindSpecificAprilTag,
-                DigitalOperation.VisionFindAnyAprilTag,
-                DigitalOperation.VisionFindAbsolutePosition,
-                DigitalOperation.VisionForceDisable,
+                
             }),
 
         new MacroOperationDescription(
@@ -950,11 +795,7 @@ public class ButtonMap implements IButtonMap
                 DigitalOperation.DriveTrainEnableFieldOrientation,
                 DigitalOperation.DriveTrainDisableFieldOrientation,
                 DigitalOperation.DriveTrainUseRobotOrientation,
-                DigitalOperation.VisionEnableStream,
-                DigitalOperation.VisionFindSpecificAprilTag,
-                DigitalOperation.VisionFindAnyAprilTag,
-                DigitalOperation.VisionFindAbsolutePosition,
-                DigitalOperation.VisionForceDisable,
+                
             }),
 
         new MacroOperationDescription(
@@ -1001,11 +842,7 @@ public class ButtonMap implements IButtonMap
                 DigitalOperation.DriveTrainEnableFieldOrientation,
                 DigitalOperation.DriveTrainDisableFieldOrientation,
                 DigitalOperation.DriveTrainUseRobotOrientation,
-                DigitalOperation.VisionEnableStream,
-                DigitalOperation.VisionFindSpecificAprilTag,
-                DigitalOperation.VisionFindAnyAprilTag,
-                DigitalOperation.VisionFindAbsolutePosition,
-                DigitalOperation.VisionForceDisable,
+                
             }),
     };
 
