@@ -53,13 +53,10 @@ public class VictorSPXWrapper implements IVictorSPX
         }
     }
 
-    public void setInvertOutput(boolean invert)
+    public void setMotorOutputSettings(boolean invert, MotorNeutralMode neutralMode)
     {
         this.wrappedObject.setInverted(invert);
-    }
 
-    public void setNeutralMode(MotorNeutralMode neutralMode)
-    {
         NeutralMode mode;
         if (neutralMode == MotorNeutralMode.Brake)
         {

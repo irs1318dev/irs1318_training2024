@@ -20,26 +20,29 @@ public class TalonSRXWrapper implements ITalonSRX
 
     final TalonSRX wrappedObject;
 
+    private final String talonId;
+
     private boolean controlModeRequired;
     private ControlMode controlMode;
 
     public TalonSRXWrapper(int deviceNumber)
     {
         this.wrappedObject = new TalonSRX(deviceNumber);
+        this.talonId = String.format("TalonSRX %d", deviceNumber);
         this.controlMode = ControlMode.PercentOutput;
         this.controlModeRequired = false;
     }
 
     public void set(double value)
     {
-        ExceptionHelpers.Assert(!this.controlModeRequired, "Control mode must be specified!");
+        ExceptionHelpers.Assert(!this.controlModeRequired, "%s: Control mode must be specified!", this.talonId);
 
         this.wrappedObject.set(this.controlMode, value);
     }
 
     public void set(double value, double feedForward)
     {
-        ExceptionHelpers.Assert(!this.controlModeRequired, "Control mode must be specified!");
+        ExceptionHelpers.Assert(!this.controlModeRequired, "%s: Control mode must be specified!", this.talonId);
 
         this.wrappedObject.set(this.controlMode, value, DemandType.ArbitraryFeedForward, feedForward);
     }
@@ -88,6 +91,7 @@ public class TalonSRXWrapper implements ITalonSRX
 
         CTREStatusCodeHelper.printError(
             this.wrappedObject.configSelectedFeedbackSensor(device, TalonSRXWrapper.pidIdx, TalonSRXWrapper.timeoutMS),
+            this.talonId,
             "TalonSRX.setSensorType");
     }
 
@@ -95,6 +99,7 @@ public class TalonSRXWrapper implements ITalonSRX
     {
         CTREStatusCodeHelper.printError(
             this.wrappedObject.setStatusFramePeriod(StatusFrameEnhanced.Status_1_General, periodMS, TalonSRXWrapper.timeoutMS),
+            this.talonId,
             "TalonSRX.setGeneralFramePeriod");
     }
 
@@ -102,6 +107,7 @@ public class TalonSRXWrapper implements ITalonSRX
     {
         CTREStatusCodeHelper.printError(
             this.wrappedObject.setStatusFramePeriod(StatusFrameEnhanced.Status_2_Feedback0, periodMS, TalonSRXWrapper.timeoutMS),
+            this.talonId,
             "TalonSRX.setFeedbackFramePeriod");
     }
 
@@ -109,6 +115,7 @@ public class TalonSRXWrapper implements ITalonSRX
     {
         CTREStatusCodeHelper.printError(
             this.wrappedObject.setStatusFramePeriod(StatusFrameEnhanced.Status_13_Base_PIDF0, periodMS, TalonSRXWrapper.timeoutMS),
+            this.talonId,
             "TalonSRX.setPIDFFramePeriod");
     }
 
@@ -116,9 +123,11 @@ public class TalonSRXWrapper implements ITalonSRX
     {
         CTREStatusCodeHelper.printError(
             this.wrappedObject.configVelocityMeasurementPeriod(SensorVelocityMeasPeriod.valueOf(periodMS), TalonSRXWrapper.timeoutMS),
+            this.talonId,
             "TalonSRX.configureVelocityMeasurementsPeriod");
         CTREStatusCodeHelper.printError(
             this.wrappedObject.configVelocityMeasurementWindow(windowSize, TalonSRXWrapper.timeoutMS),
+            this.talonId,
             "TalonSRX.configureVelocityMeasurementsWindow");
     }
 
@@ -126,6 +135,7 @@ public class TalonSRXWrapper implements ITalonSRX
     {
         CTREStatusCodeHelper.printError(
             this.wrappedObject.configAllowableClosedloopError(slotId, error, TalonSRXWrapper.timeoutMS),
+            this.talonId,
             "TalonSRX.configureAllowableClosedloopError");
     }
 
@@ -138,15 +148,19 @@ public class TalonSRXWrapper implements ITalonSRX
     {
         CTREStatusCodeHelper.printError(
             this.wrappedObject.config_kP(slotId, p, TalonSRXWrapper.timeoutMS),
+            this.talonId,
             "TalonSRX.setPIDF_kP");
         CTREStatusCodeHelper.printError(
             this.wrappedObject.config_kI(slotId, i, TalonSRXWrapper.timeoutMS),
+            this.talonId,
             "TalonSRX.setPIDF_kI");
         CTREStatusCodeHelper.printError(
             this.wrappedObject.config_kD(slotId, d, TalonSRXWrapper.timeoutMS),
+            this.talonId,
             "TalonSRX.setPIDF_kD");
         CTREStatusCodeHelper.printError(
             this.wrappedObject.config_kF(slotId, f, TalonSRXWrapper.timeoutMS),
+            this.talonId,
             "TalonSRX.setPIDF_kF");
     }
 
@@ -154,21 +168,27 @@ public class TalonSRXWrapper implements ITalonSRX
     {
         CTREStatusCodeHelper.printError(
             this.wrappedObject.config_kP(slotId, p, TalonSRXWrapper.timeoutMS),
+            this.talonId,
             "TalonSRX.setMotionMagicPIDF_kP");
         CTREStatusCodeHelper.printError(
             this.wrappedObject.config_kI(slotId, i, TalonSRXWrapper.timeoutMS),
+            this.talonId,
             "TalonSRX.setMotionMagicPIDF_kI");
         CTREStatusCodeHelper.printError(
             this.wrappedObject.config_kD(slotId, d, TalonSRXWrapper.timeoutMS),
+            this.talonId,
             "TalonSRX.setMotionMagicPIDF_kD");
         CTREStatusCodeHelper.printError(
             this.wrappedObject.config_kF(slotId, f, TalonSRXWrapper.timeoutMS),
+            this.talonId,
             "TalonSRX.setMotionMagicPIDF_kF");
         CTREStatusCodeHelper.printError(
             this.wrappedObject.configMotionCruiseVelocity(velocity, TalonSRXWrapper.timeoutMS),
+            this.talonId,
             "TalonSRX.setMotionMagicPIDF_CruiseVelocity");
         CTREStatusCodeHelper.printError(
             this.wrappedObject.configMotionAcceleration(acceleration, TalonSRXWrapper.timeoutMS),
+            this.talonId,
             "TalonSRX.setMotionMagicPIDF_Acceleration");
     }
 
@@ -176,21 +196,27 @@ public class TalonSRXWrapper implements ITalonSRX
     {
         CTREStatusCodeHelper.printError(
             this.wrappedObject.config_kP(slotId, p, TalonSRXWrapper.timeoutMS),
+            this.talonId,
             "TalonSRX.setPIDF_kP");
         CTREStatusCodeHelper.printError(
             this.wrappedObject.config_kI(slotId, i, TalonSRXWrapper.timeoutMS),
+            this.talonId,
             "TalonSRX.setPIDF_kI");
         CTREStatusCodeHelper.printError(
             this.wrappedObject.config_kD(slotId, d, TalonSRXWrapper.timeoutMS),
+            this.talonId,
             "TalonSRX.setPIDF_kD");
         CTREStatusCodeHelper.printError(
             this.wrappedObject.config_kF(slotId, f, TalonSRXWrapper.timeoutMS),
+            this.talonId,
             "TalonSRX.setPIDF_kF");
         CTREStatusCodeHelper.printError(
             this.wrappedObject.config_IntegralZone(slotId, izone, TalonSRXWrapper.timeoutMS),
+            this.talonId,
             "TalonSRX.setPIDF_IntegralZone");
         CTREStatusCodeHelper.printError(
             this.wrappedObject.configClosedloopRamp(closeLoopRampRate, TalonSRXWrapper.timeoutMS),
+            this.talonId,
             "TalonSRX.setPIDF_ClosedloopRamp");
     }
 
@@ -201,6 +227,7 @@ public class TalonSRXWrapper implements ITalonSRX
                 forwardEnabled ? LimitSwitchSource.FeedbackConnector : LimitSwitchSource.Deactivated,
                 forwardNormallyOpen ? LimitSwitchNormal.NormallyOpen : LimitSwitchNormal.NormallyClosed,
                 TalonSRXWrapper.timeoutMS),
+                this.talonId,
             "TalonSRX.updateLimitSwitchConfig-forward");
 
         CTREStatusCodeHelper.printError(
@@ -208,6 +235,7 @@ public class TalonSRXWrapper implements ITalonSRX
                 reverseEnabled ? LimitSwitchSource.FeedbackConnector : LimitSwitchSource.Deactivated,
                 reverseNormallyOpen ? LimitSwitchNormal.NormallyOpen : LimitSwitchNormal.NormallyClosed,
                 TalonSRXWrapper.timeoutMS),
+                this.talonId,
             "TalonSRX.updateLimitSwitchConfig-reverse");
     }
 
@@ -236,6 +264,7 @@ public class TalonSRXWrapper implements ITalonSRX
     {
         CTREStatusCodeHelper.printError(
             this.wrappedObject.configVoltageCompSaturation(maxVoltage, TalonSRXWrapper.timeoutMS),
+            this.talonId,
             "TalonSRX.setVoltageCompensationSaturation");
         this.wrappedObject.enableVoltageCompensation(enabled);
     }
@@ -249,6 +278,7 @@ public class TalonSRXWrapper implements ITalonSRX
     {
         CTREStatusCodeHelper.printError(
             this.wrappedObject.setSelectedSensorPosition(position, TalonSRXWrapper.pidIdx, TalonSRXWrapper.timeoutMS),
+            this.talonId,
             "TalonSRX.setPosition");
     }
 
@@ -256,6 +286,7 @@ public class TalonSRXWrapper implements ITalonSRX
     {
         CTREStatusCodeHelper.printError(
             this.wrappedObject.setSelectedSensorPosition(0.0, TalonSRXWrapper.pidIdx, TalonSRXWrapper.timeoutMS),
+            this.talonId,
             "TalonSRX.reset");
     }
 

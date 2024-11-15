@@ -24,8 +24,8 @@ public class SendableChooserWrapper<V> implements ISendableChooser<V>
     }
 
     @Override
-    public V getSelected() {
+    public V getSelected()
+    {
         return this.wrappedObject.getSelected();
     }
-
 }

@@ -5,19 +5,19 @@ import com.ctre.phoenix6.StatusCode;
 
 public class CTREStatusCodeHelper
 {
-    public static void printError(StatusCode sc, String operation)
+    public static void printError(StatusCode sc, String id, String operation)
     {
         if (sc != StatusCode.OK)
         {
-            System.err.println(operation + " failed with " + sc.toString());
+            System.err.println(String.format("%s: %s failed with %s", id, operation, sc.toString()));
         }
     }
 
-    public static void printError(ErrorCode sc, String operation)
+    public static void printError(ErrorCode sc, String id, String operation)
     {
         if (sc != ErrorCode.OK)
         {
-            System.err.println(operation + " failed with " + sc.toString());
+            System.err.println(String.format("%s: %s failed with %s", id, operation, sc.toString()));
         }
     }
 }

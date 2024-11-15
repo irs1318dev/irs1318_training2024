@@ -6,14 +6,18 @@ public class CANdleWrapper implements ICANdle
 {
     private final CANdle wrappedObject;
 
+    private final String candleId;
+
     public CANdleWrapper(int deviceNumber)
     {
         this.wrappedObject = new CANdle(deviceNumber);
+        this.candleId = String.format("CANdle %d", deviceNumber);
     }
 
     public CANdleWrapper(int deviceNumber, String canbus)
     {
         this.wrappedObject = new CANdle(deviceNumber, canbus);
+        this.candleId = String.format("CANdle %d", deviceNumber);
     }
 
     public double getBusVoltage()
@@ -45,6 +49,7 @@ public class CANdleWrapper implements ICANdle
     {
         CTREStatusCodeHelper.printError(
             this.wrappedObject.configBrightnessScalar(brightness),
+            this.candleId,
             "CANdle.configBrightnessScalar");
     }
 
@@ -80,6 +85,7 @@ public class CANdleWrapper implements ICANdle
 
         CTREStatusCodeHelper.printError(
             this.wrappedObject.configLEDType(stripType),
+            this.candleId,
             "CANdle.configLEDType");
     }
 
@@ -87,6 +93,7 @@ public class CANdleWrapper implements ICANdle
     {
         CTREStatusCodeHelper.printError(
             this.wrappedObject.configLOSBehavior(disableWhenLOS),
+            this.candleId,
             "CANdle.configLOSBehavior");
     }
 
@@ -94,6 +101,7 @@ public class CANdleWrapper implements ICANdle
     {
         CTREStatusCodeHelper.printError(
             this.wrappedObject.configStatusLedState(disableWhenRunning),
+            this.candleId,
             "CANdle.configStatusLedState");
     }
 
@@ -117,6 +125,7 @@ public class CANdleWrapper implements ICANdle
 
         CTREStatusCodeHelper.printError(
             this.wrappedObject.configVBatOutput(outputMode),
+            this.candleId,
             "CANdle.configVBatOutput");
     }
 
@@ -124,6 +133,7 @@ public class CANdleWrapper implements ICANdle
     {
         CTREStatusCodeHelper.printError(
             this.wrappedObject.modulateVBatOutput(dutyCyclePercent),
+            this.candleId,
             "CANdle.modulateVBatOutput");
     }
 
@@ -131,6 +141,7 @@ public class CANdleWrapper implements ICANdle
     {
         CTREStatusCodeHelper.printError(
             this.wrappedObject.setLEDs(r, g, b),
+            this.candleId,
             "CANdle.setLEDs");
     }
 
@@ -138,6 +149,7 @@ public class CANdleWrapper implements ICANdle
     {
         CTREStatusCodeHelper.printError(
             this.wrappedObject.setLEDs(r, g, b, w, startIdx, count),
+            this.candleId,
             "CANdle.setLEDs");
     }
 
@@ -181,6 +193,7 @@ public class CANdleWrapper implements ICANdle
 
         CTREStatusCodeHelper.printError(
             this.wrappedObject.animate(new TwinkleAnimation(r, g, b, w, speed, numLed, twinkleDivider, ledOffset), animSlot),
+            this.candleId,
             "CANdle.startTwinkleAnimation");
     }
 
@@ -224,6 +237,7 @@ public class CANdleWrapper implements ICANdle
 
         CTREStatusCodeHelper.printError(
             this.wrappedObject.animate(new TwinkleOffAnimation(r, g, b, w, speed, numLed, twinkleDivider, ledOffset), animSlot),
+            this.candleId,
             "CANdle.startTwinkleOffAnimation");
     }
 
@@ -231,6 +245,7 @@ public class CANdleWrapper implements ICANdle
     {
         CTREStatusCodeHelper.printError(
             this.wrappedObject.animate(new StrobeAnimation(r, g, b, w, speed, numLed, ledOffset), animSlot),
+            this.candleId,
             "CANdle.startStrobeAnimation");
     }
 
@@ -238,6 +253,7 @@ public class CANdleWrapper implements ICANdle
     {
         CTREStatusCodeHelper.printError(
             this.wrappedObject.animate(new SingleFadeAnimation(r, g, b, w, speed, numLed, ledOffset), animSlot),
+            this.candleId,
             "CANdle.startSingleFadeAnimation");
     }
 
@@ -245,6 +261,7 @@ public class CANdleWrapper implements ICANdle
     {
         CTREStatusCodeHelper.printError(
             this.wrappedObject.animate(new RgbFadeAnimation(brightness, speed, numLed, ledOffset), animSlot),
+            this.candleId,
             "CANdle.startRgbFaseAnimation");
     }
 
@@ -252,6 +269,7 @@ public class CANdleWrapper implements ICANdle
     {
         CTREStatusCodeHelper.printError(
             this.wrappedObject.animate(new RainbowAnimation(brightness, speed, numLed, reverseDirection, ledOffset), animSlot),
+            this.candleId,
             "CANdle.startRainbowAnimation");
     }
 
@@ -275,6 +293,7 @@ public class CANdleWrapper implements ICANdle
 
         CTREStatusCodeHelper.printError(
             this.wrappedObject.animate(new LarsonAnimation(r, g, b, w, speed, numLed, bounceMode, size, ledOffset), animSlot),
+            this.candleId,
             "CANdle.startLarsonAnimation");
     }
 
@@ -282,6 +301,7 @@ public class CANdleWrapper implements ICANdle
     {
         CTREStatusCodeHelper.printError(
             this.wrappedObject.animate(new FireAnimation(brightness, speed, numLed, sparking, cooling, reverseDirection, ledOffset), animSlot),
+            this.candleId,
             "CANdle.startFireAnimation");
     }
 
@@ -289,6 +309,7 @@ public class CANdleWrapper implements ICANdle
     {
         CTREStatusCodeHelper.printError(
             this.wrappedObject.animate(new ColorFlowAnimation(r, g, b, w, speed, numLed, forward ? ColorFlowAnimation.Direction.Forward : ColorFlowAnimation.Direction.Backward, ledOffset), animSlot),
+            this.candleId,
             "CANdle.startColorFlowAnimation");
     }
 
@@ -296,6 +317,7 @@ public class CANdleWrapper implements ICANdle
     {
         CTREStatusCodeHelper.printError(
             this.wrappedObject.clearAnimation(animSlot),
+            this.candleId,
             "CANdle.stopAnimation");
     }
 }

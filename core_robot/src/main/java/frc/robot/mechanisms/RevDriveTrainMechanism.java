@@ -198,8 +198,7 @@ public class RevDriveTrainMechanism implements IDriveTrainMechanism
             // this.driveMotors[i].setInvertSensor(driveMotorInvertSensor[i]);
             this.driveMotors[i].setPositionConversionFactor(HardwareConstants.REVDRIVETRAIN_DRIVE_TICK_DISTANCE);
             this.driveMotors[i].setVelocityConversionFactor(HardwareConstants.REVDRIVETRAIN_DRIVE_MOTOR_VELOCITY_TO_INCHES_PER_SECOND);
-            this.driveMotors[i].setNeutralMode(MotorNeutralMode.Brake);
-            this.driveMotors[i].setInvertOutput(driveMotorInvertOutput[i]);
+            this.driveMotors[i].setMotorOutputSettings(driveMotorInvertOutput[i], MotorNeutralMode.Brake);
             this.driveMotors[i].setCurrentLimit(
                 TuningConstants.REVDRIVETRAIN_DRIVE_CURRENT_STALL_LIMIT,
                 TuningConstants.REVDRIVETRAIN_DRIVE_CURRENT_FREE_LIMIT,
@@ -226,8 +225,7 @@ public class RevDriveTrainMechanism implements IDriveTrainMechanism
             this.steerMotors[i].setPositionConversionFactor(HardwareConstants.REVDRIVETRAIN_STEER_TICK_DISTANCE);
             this.steerMotors[i].setVelocityConversionFactor(HardwareConstants.REVDRIVETRAIN_STEER_MOTOR_VELOCITY_TO_DEGREES_PER_SECOND);
             // this.steerMotors[i].setAbsoluteOffset(RevDriveTrainMechanism.STEER_ABSOLUTE_OFFSETS[i]);
-            this.steerMotors[i].setNeutralMode(MotorNeutralMode.Brake);
-            this.steerMotors[i].setInvertOutput(steerMotorInvertOutput[i]);
+            this.steerMotors[i].setMotorOutputSettings(steerMotorInvertOutput[i], MotorNeutralMode.Brake);
             this.steerMotors[i].setCurrentLimit(
                 TuningConstants.REVDRIVETRAIN_STEER_CURRENT_STALL_LIMIT,
                 TuningConstants.REVDRIVETRAIN_STEER_CURRENT_FREE_LIMIT,

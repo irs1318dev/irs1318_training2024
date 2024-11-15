@@ -16,6 +16,8 @@ public class TalonFXWrapper implements ITalonFX
 
     final TalonFX wrappedObject;
 
+    private final String talonId;
+
     private TalonFXConfigurator currentConfigurator;
 
     private TalonFXControlMode controlMode;
@@ -32,17 +34,18 @@ public class TalonFXWrapper implements ITalonFX
     private StatusSignal<ReverseLimitValue> reverseLimitSwitch;
     public TalonFXWrapper(int deviceNumber)
     {
-        this(new TalonFX(deviceNumber));
+        this(new TalonFX(deviceNumber), String.format("TalonFX %d", deviceNumber));
     }
 
     public TalonFXWrapper(int deviceNumber, String canbus)
     {
-        this(new TalonFX(deviceNumber, canbus));
+        this(new TalonFX(deviceNumber, canbus), String.format("TalonFX %s-%d", canbus, deviceNumber));
     }
 
-    private TalonFXWrapper(TalonFX wrappedObject)
+    private TalonFXWrapper(TalonFX wrappedObject, String talonId)
     {
         this.wrappedObject = wrappedObject;
+        this.talonId = talonId;
 
         this.controlMode = TalonFXControlMode.Neutral;
         this.currentControlRequest = TalonFXWrapper.stop;
@@ -84,7 +87,7 @@ public class TalonFXWrapper implements ITalonFX
         switch (mode)
         {
             case PercentOutput:
-                ExceptionHelpers.Assert(feedForward == 0.0, "Don't expect to see feedForward for PercentOutput");
+                ExceptionHelpers.Assert(feedForward == 0.0, "%s: Don't expect to see feedForward for PercentOutput", this.talonId);
                 if (this.useVoltageCompensation)
                 {
                     VoltageOut voRequest;
@@ -233,7 +236,7 @@ public class TalonFXWrapper implements ITalonFX
                 break;
 
             case Coast:
-                ExceptionHelpers.Assert(feedForward == 0.0, "Don't expect to see feedForward for Coast");
+                ExceptionHelpers.Assert(feedForward == 0.0, "%s: Don't expect to see feedForward for Coast", this.talonId);
                 CoastOut coRequest;
                 if (this.currentControlRequest instanceof CoastOut)
                 {
@@ -248,7 +251,7 @@ public class TalonFXWrapper implements ITalonFX
                 break;
 
             case StaticBrake:
-                ExceptionHelpers.Assert(feedForward == 0.0, "Don't expect to see feedForward for StaticBrake");
+                ExceptionHelpers.Assert(feedForward == 0.0, "%s: Don't expect to see feedForward for StaticBrake", this.talonId);
                 StaticBrake sbRequest;
                 if (this.currentControlRequest instanceof StaticBrake)
                 {
@@ -264,7 +267,7 @@ public class TalonFXWrapper implements ITalonFX
 
             default:
             case Neutral:
-                ExceptionHelpers.Assert(feedForward == 0.0, "Don't expect to see feedForward for Neutral/default");
+                ExceptionHelpers.Assert(feedForward == 0.0, "%s: Don't expect to see feedForward for Neutral/default", this.talonId);
                 NeutralOut noRequest;
                 if (this.currentControlRequest instanceof NeutralOut)
                 {
@@ -376,6 +379,7 @@ public class TalonFXWrapper implements ITalonFX
         // apply default feedback config settings
         CTREStatusCodeHelper.printError(
             this.currentConfigurator.apply(new FeedbackConfigs(), TalonFXWrapper.timeoutSecs),
+            this.talonId,
             "TalonFX.clearRemoteSensor-apply");
     }
 
@@ -390,6 +394,7 @@ public class TalonFXWrapper implements ITalonFX
 
         CTREStatusCodeHelper.printError(
             this.currentConfigurator.apply(feedbackConfigs, TalonFXWrapper.timeoutSecs),
+            this.talonId,
             "TalonFX.updateRemoteSensor-apply");
     }
 
@@ -407,9 +412,11 @@ public class TalonFXWrapper implements ITalonFX
 
         CTREStatusCodeHelper.printError(
             this.position.setUpdateFrequency(frequencyHz, TalonFXWrapper.timeoutSecs),
+            this.talonId,
             "TalonFX.setFeedbackUpdateRate-Position");
         CTREStatusCodeHelper.printError(
             this.velocity.setUpdateFrequency(frequencyHz, TalonFXWrapper.timeoutSecs),
+            this.talonId,
             "TalonFX.setFeedbackFramePeriod-Velocity");
     }
 
@@ -422,6 +429,7 @@ public class TalonFXWrapper implements ITalonFX
 
         CTREStatusCodeHelper.printError(
             this.error.setUpdateFrequency(frequencyHz, TalonFXWrapper.timeoutSecs),
+            this.talonId,
             "TalonFX.setErrorUpdateRate");
     }
 
@@ -434,6 +442,7 @@ public class TalonFXWrapper implements ITalonFX
 
         CTREStatusCodeHelper.printError(
             this.forwardLimitSwitch.setUpdateFrequency(frequencyHz, TalonFXWrapper.timeoutSecs),
+            this.talonId,
             "TalonFXWrapper.setForwardLimitSwitchUpdateRate");
     }
 
@@ -446,6 +455,7 @@ public class TalonFXWrapper implements ITalonFX
 
         CTREStatusCodeHelper.printError(
             this.reverseLimitSwitch.setUpdateFrequency(frequencyHz, TalonFXWrapper.timeoutSecs),
+            this.talonId,
             "TalonFXWrapper.setReverseLimitSwitchUpdateRate");
     }
 
@@ -453,6 +463,7 @@ public class TalonFXWrapper implements ITalonFX
     {
         CTREStatusCodeHelper.printError(
             this.wrappedObject.optimizeBusUtilization(),
+            this.talonId,
             "TalonFX.optimizeCanbus");
     }
 
@@ -583,6 +594,7 @@ public class TalonFXWrapper implements ITalonFX
                 slot0Configs.kV = f;
                 CTREStatusCodeHelper.printError(
                     this.currentConfigurator.apply(slot0Configs, TalonFXWrapper.timeoutSecs),
+                    this.talonId,
                     "TalonFXWrapper.setPIDF");
                 break;
 
@@ -594,6 +606,7 @@ public class TalonFXWrapper implements ITalonFX
                 slot1Configs.kV = f;
                 CTREStatusCodeHelper.printError(
                     this.currentConfigurator.apply(slot1Configs, TalonFXWrapper.timeoutSecs),
+                    this.talonId,
                     "TalonFXWrapper.setPIDF");
                 break;
 
@@ -606,6 +619,7 @@ public class TalonFXWrapper implements ITalonFX
                 slot2Configs.kV = f;
                 CTREStatusCodeHelper.printError(
                     this.currentConfigurator.apply(slot2Configs, TalonFXWrapper.timeoutSecs),
+                    this.talonId,
                     "TalonFXWrapper.setPIDF");
                 break;
         }
@@ -626,6 +640,7 @@ public class TalonFXWrapper implements ITalonFX
                 slot0Configs.kS = s;
                 CTREStatusCodeHelper.printError(
                     this.currentConfigurator.apply(slot0Configs, TalonFXWrapper.timeoutSecs),
+                    this.talonId,
                     "TalonFXWrapper.setMotionMagicPIDVS-PID");
                 break;
 
@@ -638,6 +653,7 @@ public class TalonFXWrapper implements ITalonFX
                 slot1Configs.kS = s;
                 CTREStatusCodeHelper.printError(
                     this.currentConfigurator.apply(slot1Configs, TalonFXWrapper.timeoutSecs),
+                    this.talonId,
                     "TalonFXWrapper.setMotionMagicPIDVS-PID");
                 break;
 
@@ -651,6 +667,7 @@ public class TalonFXWrapper implements ITalonFX
                 slot2Configs.kS = s;
                 CTREStatusCodeHelper.printError(
                     this.currentConfigurator.apply(slot2Configs, TalonFXWrapper.timeoutSecs),
+                    this.talonId,
                     "TalonFXWrapper.setMotionMagicPIDVS-PID");
                 break;
         }
@@ -661,6 +678,7 @@ public class TalonFXWrapper implements ITalonFX
         motionMagicConfigs.MotionMagicJerk = maxJerk;
         CTREStatusCodeHelper.printError(
             this.currentConfigurator.apply(motionMagicConfigs, TalonFXWrapper.timeoutSecs),
+            this.talonId,
             "TalonFXWrapper.setMotionMagicPIDVS-MM");
     }
 
@@ -703,6 +721,7 @@ public class TalonFXWrapper implements ITalonFX
 
         CTREStatusCodeHelper.printError(
             this.currentConfigurator.apply(hardwareLimitSwitchConfigs, TalonFXWrapper.timeoutSecs),
+            this.talonId,
             "TalonFXWrapper.updateLimitSwitchConfig");
 
         if (forwardEnabled && this.forwardLimitSwitch == null)
@@ -734,6 +753,7 @@ public class TalonFXWrapper implements ITalonFX
 
         CTREStatusCodeHelper.printError(
             this.currentConfigurator.refresh(motorConfigs, TalonFXWrapper.timeoutSecs),
+            this.talonId,
             "TalonFXWrapper.setMotorSettings-refresh");
 
         motorConfigs.Inverted = invert ? InvertedValue.Clockwise_Positive : InvertedValue.CounterClockwise_Positive;
@@ -741,6 +761,7 @@ public class TalonFXWrapper implements ITalonFX
 
         CTREStatusCodeHelper.printError(
             this.currentConfigurator.apply(motorConfigs, TalonFXWrapper.timeoutSecs),
+            this.talonId,
             "TalonFXWrapper.setMotorSettings-apply");
     }
 
@@ -767,6 +788,7 @@ public class TalonFXWrapper implements ITalonFX
 
         CTREStatusCodeHelper.printError(
             this.currentConfigurator.apply(currentLimitsConfigs, TalonFXWrapper.timeoutSecs),
+            this.talonId,
             "TalonFX.setSupplyCurrentLimit");
     }
 
@@ -781,6 +803,7 @@ public class TalonFXWrapper implements ITalonFX
 
         CTREStatusCodeHelper.printError(
             this.currentConfigurator.setPosition(position, TalonFXWrapper.timeoutSecs),
+            this.talonId,
             "TalonFX.setPosition");
     }
 
@@ -797,7 +820,10 @@ public class TalonFXWrapper implements ITalonFX
         }
 
         this.position.refresh();
-        CTREStatusCodeHelper.printError(this.position.getStatus(), "TalonFX.getPosition");
+        CTREStatusCodeHelper.printError(
+            this.position.getStatus(),
+            this.talonId,
+            "TalonFX.getPosition");
 
         return this.position.getValue();
     }
@@ -810,7 +836,10 @@ public class TalonFXWrapper implements ITalonFX
         }
 
         this.velocity.refresh();
-        CTREStatusCodeHelper.printError(this.velocity.getStatus(), "TalonFX.getVelocity");
+        CTREStatusCodeHelper.printError(
+            this.velocity.getStatus(),
+            this.talonId,
+            "TalonFX.getVelocity");
 
         return this.velocity.getValue();
     }
@@ -823,7 +852,10 @@ public class TalonFXWrapper implements ITalonFX
         }
 
         this.error.refresh();
-        CTREStatusCodeHelper.printError(this.error.getStatus(), "TalonFX.getError");
+        CTREStatusCodeHelper.printError(
+            this.error.getStatus(),
+            this.talonId,
+            "TalonFX.getError");
 
         return this.error.getValue();
     }

@@ -46,20 +46,21 @@
 4. [Instructions](#instructions)
    1. [Setting up your Environment](#setting-up-your-environment)
    2. [Simple Command Line operations and Git usage](#simple-command-line-operations-and-git-usage)
-   3. [Your normal end-to-end git workflow](#your-normal-end-to-end-git-workflow)
+   3. [A normal end-to-end git workflow](#a-normal-end-to-end-git-workflow)
    4. [So you started coding before creating a topic branch](#so-you-started-coding-before-creating-a-topic-branch)
-   5. [Making Simple Operation changes](#making-simple-operation-changes)
-   6. [Adding a new Electronics Constant](#adding-a-new-electronics-constant)
-   7. [Adding a new Hardware or Tuning Constant](#adding-a-new-hardware-or-tuning-constant)
-   8. [Adding a new Logging Key](#adding-a-new-logging-key)
-   9. [Writing a new Mechanism](#writing-a-new-mechanism)
+   5. [Where should I put code I'm working on?](#where-should-i-put-code-im-working-on)
+   6. [Making Simple Operation changes](#making-simple-operation-changes)
+   7. [Adding a new Electronics Constant](#adding-a-new-electronics-constant)
+   8. [Adding a new Hardware or Tuning Constant](#adding-a-new-hardware-or-tuning-constant)
+   9. [Adding a new Logging Key](#adding-a-new-logging-key)
+   10. [Writing a new Mechanism](#writing-a-new-mechanism)
       1. [Define mechanism class and member variables](#define-mechanism-class-and-member-variables)
       2. [Write mechanism constructor](#write-mechanism-constructor)
       3. [Write mechanism readSensors function](#write-mechanism-readsensors-function)
       4. [Write mechanism update function](#write-mechanism-update-function)
       5. [Write mechanism stop function](#write-mechanism-stop-function)
       6. [Write any getter functions](#write-any-getter-functions)
-   10. [Writing Macros and Autonomous Routines](#writing-macros-and-autonomous-routines)
+   11. [Writing Macros and Autonomous Routines](#writing-macros-and-autonomous-routines)
       1. [Writing Tasks](#writing-tasks)
          1. [Define task class, member variables, and constructor](#define-task-class-member-variables-and-constructor)
          2. [Write task begin function](#write-task-begin-function)
@@ -126,7 +127,7 @@ The joystick is a normal computer joystick, much like you’d find for playing a
 The button pads we use are PC gaming button pads which have 12 buttons.  Our team historically used a button pad for the Co-Driver’s input method, or as a secondary driver input method.
 
 #### Controllers
-Another controller type is an Xbox 360, Xbox One, PS4 controller, or a 3rd-party controller that has USB input.  This is an alternative that can be used by a Driver and/or Operator of the robot if the control scheme is preferable based on that year's challenge.  Since 2020, we have switched to typically having a Driver and Operator each with their own controller to work together to perform tasks.
+Another controller type is an Xbox 360, Xbox One, PS4 controller, or a 3rd-party controller that has USB input.  This is an alternative that can be used by a Driver and/or Codriver of the robot if the control scheme is preferable based on that year's challenge.  Since 2020, we have switched to typically having a Driver and Codriver each with their own controller to work together to perform tasks.
 
 #### Dip Switches
 Dip Switches are simple toggle switches which are used to switch between different modes on the Robot.  Our team historically used dip switches to allow us to select which of several different pre-programmed autonomous routines to use without having to change anything within the code or rely on the smart dashboard.  In 2019, we started using the Smart Dashboard to choose the autonomous routine.
@@ -200,7 +201,7 @@ The ```ButtonMap``` contains the mapping of various joystick/controller buttons 
 Macros are groupings of different Operations that need to happen in a certain order and with certain conditions between the various operations.  This is typically done by defining a bunch of individual "tasks" that perform one operation until it has completed, and then composing them together using different types of logic.  One example of a macro from 2019 would be the climb macro, which moved the robot forwards, engaged the arms, rotated the cam, drove forward, and finally lifted the elevator and reset the arms and cam.  Another example of a macro from 2019 would be the Vision-based alignment and approach of the rocket and cargo ship.
 
 ##### Shifts
-Sometimes there aren't enough buttons on the joystick in order to accomodate the number of operations and macros that we want to have available to the driver and/or operator.  We have the ability to define "shifts" that allow the same button to mean different things depending on when another button is pressed.  These shifts are described in the ```ButtonMap```.
+Sometimes there aren't enough buttons on the joystick in order to accomodate the number of operations and macros that we want to have available to the driver and/or codriver.  We have the ability to define "shifts" that allow the same button to mean different things depending on when another button is pressed.  These shifts are described in the ```ButtonMap```.
 
 #### Autonomous Routines
 Autonomous routines are designed very similarly to macros, except that they are triggered automatically by the Driver when the autonomous mode starts instead of by buttons on the joystick.  Autonomous routine selection occurs in the ```AutonomousRoutineSelector``` class, with the specific routines defined in that class as well. 
@@ -211,17 +212,11 @@ The robot code makes use of a number of external libraries in order to make prog
 #### Guice
 [Guice](https://github.com/google/guice) (pronounced "juice") is a dependency injection library, which is responsible for the various "@Inject" and "@Singleton" markup that is seen throughout the code.  The purpose of Guice is to make it easier to plug together the entire system in such a way that it is still unit-testable and able to be simulated in Fauxbot.  You will need to use Guice's @Singleton and @Inject markup when writing a mechanism.
 
-#### OpenCV
-[OpenCV](https://opencv.org/) is a computer vision library that is used for fast and efficient processing of images.  We use OpenCV functions to capture images, manipulate them (undistort, HSV filtering), write them, and discover important parts of them (find contours).
-
 #### CTRE Phoenix
-[CTRE Phoenix](https://github.com/CrossTheRoadElec/Phoenix-Documentation) is a library that provides the ability to communicate with and control various motors using the TalonSRX, TalonFX, and VictorSPX over CAN.  We use CTRE Phoenix to control the majority of our TalonSRXs/TalonFXs so that we can run PID on the TalonSRX/TalonFX itself for a faster update rate.
+[CTRE Phoenix](https://docs.ctr-electronics.com/) is a library that provides the ability to communicate with and control various motors using the TalonSRX, TalonFX, and VictorSPX over CAN.  We use CTRE Phoenix to control the majority of our TalonSRXs/TalonFXs so that we can run PID on the TalonSRX/TalonFX itself for a faster update rate.
 
 #### Spark MAX API
 The [Spark MAX](http://www.revrobotics.com/sparkmax-software/) has a library that provides the ability to communicate with and control various motors using the SparkMAX over CAN.  We use the Spark MAX to control NEO Motors so that we can use these brushless motors and run PID on the SparkMAX itself for a fast update rate.
-
-#### NavX MXP
-The [NavX MXP](http://www.pdocs.kauailabs.com/navx-mxp/software/) has a library that is used to interact with the NavX MXP.  The NavX uses its Gyroscope and Accelerometers in order to provide orientation measurements for field positioning purposes.
 
 #### JUnit
 [JUnit](https://junit.org/junit4/) is a unit testing library for Java.  JUnit is fairly simple and provides some comparison functions and a framework for running unit tests.
@@ -229,21 +224,27 @@ The [NavX MXP](http://www.pdocs.kauailabs.com/navx-mxp/software/) has a library 
 #### Mockito
 [Mockito](http://site.mockito.org/) is a library for mocking objects for unit testing.  Mockito provides a way to create fake versions of objects that have behaviors that you can describe in a very succinct way.
 
+#### OpenCV
+[OpenCV](https://opencv.org/) is a computer vision library that is used for fast and efficient processing of images.  We use OpenCV functions to capture images, manipulate them (undistort, HSV filtering), write them, and discover important parts of them (find contours).
+
+#### AprilTag
+[AprilTag](https://github.com/AprilRobotics/apriltag) is a computer vision library that is used for finding and using AprilTag fiducials in images.  Most of the code directly interacting with the AprilTag library is already written and won't need significant regular updates.
+
 ## Instructions
 ### Setting up your Environment
 To prepare your computer for Robot programming with our team, you will need to follow the following steps:
 1. Installing everything:
-   1. Install development environment.  Run the [WPILib installer](https://github.com/wpilibsuite/allwpilib/releases) to install WPI's special version of VS Code, the JDK, WPILib, and other dependencies.  Be sure to select the version appropriate for your operating system.  You could alternatively choose not to install all of the FIRST system and just install and set up JDK 11 on your own.
+   1. Install development environment.  There are two options, either installing the WPILib VS Code along with other WPILib tools, or just installing and configuring the most recent "Long-Term Support" version of the JDK.
+      1. To install WPILib VS Code, run the [WPILib installer](https://github.com/wpilibsuite/allwpilib/releases).  It will install WPI's special version of VS Code, the JDK, WPILib library dependencies, other dependencies, and some special tools.  Be sure to select the version appropriate for your operating system.
+      2. To install the latest "Long-Term Support" JDK (17, 21, ...), download the correct installer for your operating system from [Oracle's JDK page](https://www.oracle.com/java/technologies/downloads/).  You will then need to configure the JAVA_HOME environment variable, in "Configuraing things" step 2 below.
    2. Install regular VS Code.  Run the [VS Code Installer](https://code.visualstudio.com/) to install the regular version of VS Code.  Be sure to select the version appropriate for your operating system.
    3. Install Git.  Run the [Git installer](https://git-scm.com/downloads) to install the Git client.  Be sure to select the version appropriate for your operating system.
    4. Install the Java Extension Pack for VS Code.  In VS Code, open the extensions side bar by either clicking on the corresponding icon or clicking View --> Open View..., typing "Extensions", and selecting "Extensions" (side bar).  Within the Extensions side bar, search for the "Java Extension Pack" published by Microsoft, and then click to install it.  Optionally, I would also recommend installing the "Live Share Extension Pack" published by Microsoft.
    5. Install GitHub Desktop (optional).  Our team uses GitHub as the host for our source control system, so if you are more comfortable having a GUI for interacting with it, then GitHub Desktop will be the best supported.  Install the appropriate version of [GitHub Desktop](https://desktop.github.com/) for your operating system.
-   6. Install NAVX MXP UI (optional).  Run the [KuauiLabs navX-MXP installer](https://pdocs.kauailabs.com/navx-mxp/software/navx-mxp-ui/).  I believe that this is Windows-only.
-   7. Install CTRE Phoenix (optional).  Run the [CTRE Phoenix installer](http://www.ctr-electronics.com/control-system/hro.html#product_tabs_technical_resources).  I believe that this is Windows-only.
-   8. Install Spark MAX client application (optional).  Run the [Spark MAX Client installer](http://www.revrobotics.com/sparkmax-software/#spark-max-client-application).  I believe that this is Windows-only.
 2. Configuring things:
-   1. Git uses VIM as the default text editor for commit messages.  Normal people not very familiar with VIM usage, so it is strongly recommended to change to a more normal windowed application as VIM can be very confusing for beginners.  I would recommend switching to use VS Code as your editor and default diff tool.
+   1. Git uses VIM as the default text editor for commit messages.  Normal people not very familiar with VIM usage, so it is strongly recommended to change to a more normal windowed application as VIM can be very confusing for anyone without VIM experience.  I would recommend switching to use VS Code as your editor and default diff tool.
       1. Use VS Code as your default text editor by running ```git config --global core.editor "code --wait"``` from a Command Prompt window.
+         1. If you are on a non-Windows system, you may need to make sure that running the command "code" from the command line (Terminal) successfully opens VS Code.  If it does not, Open VS Code, then open its command window (CTRL+P on Linux, COMMAND+P on Mac??), type "> path" into the window that appears, and select the option that mentions updating "path" or installing the "code" command for opening VS Code.
       2. Modify your Global settings by running ```git config --global -e```, and then adding the following entries to the end of the file:
       ```
       [diff]
@@ -256,7 +257,7 @@ To prepare your computer for Robot programming with our team, you will need to f
       2. Click the option that says "Edit the system environment variables".  
       3. Click the "Environment Variables..." button at the bottom of the window.
       4. Within the "System variables" section, click the "New..." button.
-      5. In the "New System Variable" dialog, use the Variable name "JAVA_HOME" and value "C:\Program Files\Java\jdk-11", then click Ok.
+      5. In the "New System Variable" dialog, use the Variable name "JAVA_HOME" and value "C:\Program Files\Java\jdk-21", then click Ok.
       6. Click ok to close the Environment Variables and System Properties windows.
       7. Restart your computer.
 3. Get the code onto your local machine.
@@ -300,7 +301,7 @@ For more information about Git in command prompt, look here:
 [GitHub's Git cheat-sheet](https://services.github.com/on-demand/downloads/github-git-cheat-sheet/)
 [GitHub's Git Handbook](https://guides.github.com/introduction/git-handbook/)
 
-### Your normal end-to-end git workflow
+### A normal end-to-end git workflow
 When working with branches, you will typically follow a workflow like below:
 
 1. Switch to master branch.  Run "```git checkout master```".  This will fail if you have pending changes.  If you don't have any pending changes that you care about, you can run "```git clean -d -f```".  If that doesn't solve the problem, run "```git stash```".  If you have changes that you cared about from a previous topic branch, see step 5 and come back here after step 7 or 8.  If you started making changes before following these steps, look at the [So you started coding before creating a topic branch](#so-you-started-coding-before-creating-a-topic-branch) section below.
@@ -322,10 +323,16 @@ If you started coding in "the wrong branch", usually you can recover from it as 
 5. Retrieve your changes from the stash.  Run "```git stash pop```".
 6. Continue making changes to your code.  Follow steps 5-8 in the section above ([Your normal end-to-end git workflow](#your-normal-end-to-end-git-workflow)).
 
-### Making Simple Operation changes
-To add a new action that the robot can take with a mechanism, first open the ```AnalogOperation``` or ```DigitalOperation``` enum (AnalogOperation.java or DigitalOperation.java) and add a new value to the list in that file.  We try to keep the various operations organized, so we keep them listed in a different section for each Mechanism.  The operation should be named starting with the mechanism (e.g. "DriveTrain", "Intake", etc.), and then a description of the action (e.g. "Turn", "RaiseArm", etc.) to make one single pascal-case value (e.g. "DriveTrainTurn", "IntakeRaiseArm", etc.).  Remember that Analog/Digital Operations are a single, simple thing that is done by the robot.  Any more complex action that we want the robot to take will be a Macro which composes these Analog/Digital Operations together (which we will talk about later).
+### Where should I put code I'm working on?
+Generally, all code that you write should go somewhere under core_robot\src\main\java\frc\robot.  Some of the key places are:
+core_robot\src\main\java\frc\robot\driver - mostly ButtonMap.java, AnalogOperation.java, DigitalOperation.java, AutonomousRoutineSelector.java, and the controltasks subdirectory.
+core_robot\src\main\java\frc\robot\mechanisms - mechanisms will go here
+core_robot\src\main\java\frac\robot - mostly ElectronicsConstants.java, HardwareConstants.java, TuningConstants.java, and SettingsManager.java
 
-Next, you will open the ButtonMap.java file and add another mapping into the AnalogOperationSchema/DigitalOperationSchema that describes the AnalogOperation/DigitalOperation that you just added.  Remember that Analog Operations represent things that are done to a certain extent, using double (decimal) values typically between -1.0 and 1.0.  Digital Operations represent things that are either done or not done, using Boolean values (true or false).  Each type of Operation, Analog or Digital, has their own corresponding type of Description.
+### Making Simple Operation changes
+To add a new action that the robot can take with a mechanism, first open the ```AnalogOperation``` or ```DigitalOperation``` enum (AnalogOperation.java or DigitalOperation.java under core_robot\src\main\java\frc\robot\driver) and add a new value to the list in that file.  We try to keep the various operations organized, so we keep them listed in a different section for each Mechanism.  The operation should be named starting with the mechanism (e.g. "DriveTrain", "Intake", etc.), and then a description of the action (e.g. "Turn", "RaiseArm", etc.) to make one single pascal-case value (e.g. "DriveTrainTurn", "IntakeRaiseArm", etc.).  Remember that Analog/Digital Operations are a single, simple thing that is done by the robot.  Any more complex action that we want the robot to take will be a Macro which composes these Analog/Digital Operations together (which we will talk about later).
+
+Next, you will open the ButtonMap.java file (under core_robot\src\main\java\frc\robot\driver) and add another mapping into the AnalogOperationSchema/DigitalOperationSchema that describes the AnalogOperation/DigitalOperation that you just added.  Remember that Analog Operations represent things that are done to a certain extent, using double (decimal) values typically between -1.0 and 1.0.  Digital Operations represent things that are either done or not done, using Boolean values (true or false).  Each type of Operation, Analog or Digital, has their own corresponding type of Description.
 
 ```java
     new AnalogOperationDescription(
@@ -336,12 +343,12 @@ Next, you will open the ButtonMap.java file and add another mapping into the Ana
         TuningConstants.DRIVETRAIN_X_DEAD_ZONE),
 ```
 
-The Analog description takes parameters describing the User Input Device (Driver or Operator controller) and the axis of the joystick (X, Y, Throttle, etc.).  It also includes the ability to invert the axis (so that the "forward" direction matches positive) and the ability to provie a dead zone (as joysticks are often imperfect at mesauring the middle).
+The Analog description takes parameters describing the User Input Device (Driver or Codriver controller) and the axis of the joystick (X, Y, Throttle, etc.).  It also includes the ability to invert the axis (so that the "forward" direction matches positive) and the ability to provie a dead zone (as joysticks are often imperfect at mesauring the middle).
 
 ```java
     new DigitalOperationDescription(
         DigitalOperation.IntakeIn,
-        UserInputDevice.Operator,
+        UserInputDevice.Codriver,
         UserInputDeviceButton.XBONE_A_BUTTON,
         ButtonType.Simple),
 ```
@@ -349,7 +356,7 @@ The Analog description takes parameters describing the User Input Device (Driver
 The Digital description takes arguments describing the User Input Device, the button on the joystick, and the type of button (Simple, Toggle, or Click).  Simple buttons are typically used for continuous actions (such as running an intake), Toggle actions are typically used for macros, and Click actions are typically used for single-shot actions (such as extending an arm).
 
 ### Adding a new Electronics Constant
-To add a new constant that describes how the robot is wired/configured electronically, first open the ```ElectronicsConstants``` class (ElectronicsConstants.java) and add a new constant value.  We try to keep the various constants organized, so we keep them listed in a different section for each Mechanism.  Each constant is of the form:
+To add a new constant that describes how the robot is wired/configured electronically, first open the ```ElectronicsConstants``` class (ElectronicsConstants.java under core_robot\src\main\java\frc\robot) and add a new constant value.  We try to keep the various constants organized, so we keep them listed in a different section for each Mechanism.  Each constant is of the form:
 ```java
     public static final Type NAME = value;
 ```
@@ -371,23 +378,25 @@ The Type will depend on what is being tracked, usually an  "```int```", "```doub
 The naming convention for our tuning constants is that all of them start with "MECHANISMNAME_" and then is followed with a description of what is being kept in the constant.  The Name uses "yelling snake-case", which is an all-caps form of snake-case, where each word or compound-word is separated by the underscore character "_".
 
 ### Adding a new Logging Key
-To add a new key for logging purposes, first open the ```LoggingKey``` enum (LoggingKey.java) and add a new value to the list in that file.  We try to keep the various logging keys organizated by mechanism, so please keep them sorted in a sensible order.  Each logging key is of the form:
+To add a new key for logging purposes, first open the ```LoggingKey``` enum (LoggingKey.java) and add a new value to the list in that file.  We try to keep the various logging keys organizated by mechanism, so please keep them sorted in a sensible order.  Each logging key is of the form below, with a given name, and with the first parameter being the name displayed in the dashboard, the second being the type, and the third being whether it is an input from a sensor (true) or not (false):
 ```java
-    Name("value"),
+    Name("value", LoggingType.String, false),
 ```
 
-The name is of the form "MechanismState", where the first part is the name of the mechanism (e.g. "Intake" or "DriveTrain") and the second part is the state that is being logged (e.g. "IsExtended" or "LeftDistance").  The name uses pascal-case, where multiple words are included and separated by capitalizing the first letter of each word.  The value is of the form "m.state", where the first part is a 1- to 2-letter abbreviation for the mechanism (e.g. "i" for intake or "dt" for DriveTrain) that is unique for the mechanisms on the robot and the second part is a camel-case form of the state.  Camel-case is like pascal-case, except the first letter of the element is lower-case.
+The name is of the form "MechanismState", where the first part is the name of the mechanism (e.g. "Intake" or "DriveTrain") and the second part is the state that is being logged (e.g. "IsExtended" or "LeftDistance").  The name uses pascal-case, where multiple words are included and separated by capitalizing the first letter of each word.  The value is of the form "m/state", where the first part is an abbreviation for the mechanism (e.g. "i" for intake or "dt" for DriveTrain) that is unique for the mechanisms on the robot and the second part is a camel-case form of the state.  Camel-case is like pascal-case, except the first letter of the element is lower-case.
 
-Put together, an entry for the DriveTrain's Left Distance would look like:
+Put together, an entry for a differential (Tank) DriveTrain's Left Distance would look like:
 ```java
-    DriveTrainLeftDistance("dt.leftDistance"),
+    DriveTrainLeftDistance("dt/leftDistance", LoggingType.Number, true),
 ```
 
 ### Writing a new Mechanism
-Mechanisms handle the interactions with the actuators (e.g. motors, pneumatic solenoids) and sensors (e.g. encoders, limit switches) of each part of the robot, controlling them based on the operations from the Driver.  A mechanism is a class that implements the ```IMechanism``` interface with a name based on the name of that portion of the robot (e.g. DriveTrain, Intake) combined with "Mechanism", such as ThingMechanism.  It should be placed within the mechanisms folder with the other mechanisms and managers.
+Mechanisms handle the interactions with the actuators (e.g. motors, pneumatic solenoids) and sensors (e.g. encoders, limit switches) of each part of the robot, controlling them based on the operations from the Driver.  A mechanism is a class that implements the ```IMechanism``` interface with a name based on the name of that portion of the robot (e.g. DriveTrain, Intake) combined with "Mechanism", such as IntakeMechanism.  It should be placed within the mechanisms folder (under core_robot\src\main\java\frc\robot\mechanisms) with the other mechanisms and managers.
 
 #### Define mechanism class and member variables
 ```java
+package frc.robot.mechanisms;
+
 @Singleton
 public class ThingMechanism implements IMechanism
 {
@@ -396,7 +405,7 @@ public class ThingMechanism implements IMechanism
 
   // sensors and actuators
   private final ISomeSensor nameOfSensor;
-  private final ISomeActuator nameOfAcutator;
+  private final ISomeActuator nameOfActuator;
 
   // logger
   private final ILogger logger;
@@ -408,7 +417,7 @@ public class ThingMechanism implements IMechanism
   private boolean someState;
 ```
 
-At the top of the class, you should have the driver ("```private IDriver driver;```"), followed by a list of the definitions of your different actuators and sensors ("```private final ISomeActuator nameOfActuator;```" and "```private final ISomeSensor nameOfSensor;```").  These will be initialized in the constructor.  After the driver and set of actuators and sensors are defined, you will also need to define the logger ("```private ILogger logger;```"), anything that will be read from the sensors ("```private boolean someSetting;```"), and any state that needs to be kept for the operation of the mechanism ("```private boolean someState;```").
+At the top of the file, you should indicate the package (which should be "frc.robot.mechanisms") and then define the class with the "@Singleton" attribute markup. Within the class, you should first define the driver ("```private IDriver driver;```"), and then define each of the actuators and sensors controlled by the mechanism ("```private final ISomeActuator nameOfActuator;```" and "```private final ISomeSensor nameOfSensor;```", using the proper type for the sensors/actuators of course).  These will all be initialized in the constructor.  After the driver and set of actuators and sensors are defined, you may also need to define the logger ("```private ILogger logger;```"), anything that will be read from the sensors ("```private boolean someSetting;```"), and any state that needs to be kept for the operation of the mechanism ("```private boolean someState;```").
 
 #### Write mechanism constructor
 ```java
@@ -417,8 +426,8 @@ At the top of the class, you should have the driver ("```private IDriver driver;
   {
     this.driver = driver;
 
-    this.nameOfSensor = provider.GetSomeSensor(ElectronicsConstants.THING_NAMEOFSENSOR_PWM_CHANNEL);
-    this.nameOfActuator = provider.GetSomeActuator(ElectronicsConstants.THING_NAMEOFACTUATOR_PWM_CHANNEL);
+    this.nameOfSensor = provider.getSomeSensor(ElectronicsConstants.THING_NAMEOFSENSOR_DIO_CHANNEL);
+    this.nameOfActuator = provider.getSomeActuator(ElectronicsConstants.THING_NAMEOFACTUATOR_PWM_CHANNEL);
 
     this.logger = logger;
 
@@ -428,7 +437,7 @@ At the top of the class, you should have the driver ("```private IDriver driver;
   ...
 ```
 
-After defining all of the class's variables, you will define a constructor named like "```public ThingMechanism(IDriver driver, IRobotProvider provider, LoggingManager logger)```".  Since 2017 we’ve made use of Google’s Guice to control dependency injection, which is the reason why the special ```@Inject``` markup is required.  You will first set the driver to the value that is provided to the constructor by Guice.  You will then set the value for each actuator and sensor you defined earler by calling the corresponding function on the ```IRobotProvider``` that is also passed into the constructor.  These functions will take some number of arguments based on how the actuators/sensors are physically plugged together in the robot (such as CAN Ids, DIO channel, Analog channel, PCM channel, or PWM channel).  These arguments should be placed as constants in the ElectronicsConstants file with names such as THING_NAMEOFACTUATOR_PWM_CHANNEL.  We don’t necessarily know in advance how the robot plugs together, so they can be initialized with a value of -1 until we do.  After initializing the sensors and actuators, you should set the logger as provided and the settings and states to their default values.
+After defining all of the class's variables, you will define a constructor named like "```public ThingMechanism(IDriver driver, IRobotProvider provider, LoggingManager logger)```".  Since 2017 we’ve made use of Google’s Guice to control dependency injection, which is the reason why the special ```@Inject``` attribute markup is required.  Guice can/will provide some of the parameters that you will need, including the IDriver, IRobotProvider, and LoggingManager.  It can also provide an ITimer if needed.  Within the constructor, you should first set the class's driver instance/member variable to the value that is passed into the constructor.  You will then set the value for each actuator and sensor you defined earler by calling the corresponding function on the ```IRobotProvider``` that is also passed into the constructor.  These functions will take some number of arguments based on how the actuators/sensors are physically plugged together in the robot (such as CAN Ids, DIO channel, Analog channel, PCM channel, or PWM channel).  These arguments should be placed as constants in the ElectronicsConstants file with names such as THING_NAMEOFACTUATOR_PWM_CHANNEL.  We don’t necessarily know in advance how the robot plugs together, so they can be initialized with a value of -1 until we do.  After initializing the sensors and actuators, you should set the logger as provided and the settings and states to their default values.
 
 #### Write mechanism readSensors function
 ```java
@@ -441,12 +450,12 @@ After defining all of the class's variables, you will define a constructor named
   }
 ```
 
-The ```readSensors()``` function reads from the relevant sensors for that mechanism, stores the results in class member variables, and then logs the results to the logger.  Most simple sensor types have a simple ```get()``` function or similar to read the current value from that sensor.  An entry in the ```LoggingKey``` enum will need to be added to correspond to each setting that we want to log.
+The ```readSensors()``` function reads from the relevant sensors for that mechanism, stores the results in class member variables, and then logs the results to the logger.  Most simple sensor types have a simple ```get()``` function or similar to read the current value from that sensor.  Sometimes there are functions named something like ```getXX()``` function to get more specific data about "XX".  An entry in the ```LoggingKey``` enum will need to be added to correspond to each thing that we want to log.
 
 #### Write mechanism update function
 ```java
   @Override
-  public void update()
+  public void update(RobotMode mode)
   {
     boolean shouldThingAction = this.driver.getDigital(DigitalOperation.ThingAction);
 
@@ -658,7 +667,7 @@ To-Do.
 ### PathPlanner
 PathPlanner is a library that is used to create autonomus paths that are called in the ```AutonomousRoutineSelector```
 
-Every robot path called trajectory need to have a ```trajecotryManager``` which stores all generated paths and needs to be passed in as the first parameter of the path to store all the paths. ```pathPlanner.buildTrajectory()``` builds the trejectory and takes in a Maximum velocity and maximum acceleration the robot can reach on a given path. It also takes any number of ```PathPlannerWaypoint()``` which are the points the robots travels along and the last paramerter is the name of the Path. The ```PathPlannerWaypoint()``` takes a X-Coordinate, Y-Coordinate, a headding which is the direction the robot will move into the point, and the orientation which is the direction the robot will face in which while traveling to the given point.
+Every robot path called trajectory need to have a ```trajectoryManager``` which stores all generated paths and needs to be passed in as the first parameter of the path to store all the paths. ```pathPlanner.buildTrajectory()``` builds the trejectory and takes in a Maximum velocity and maximum acceleration the robot can reach on a given path. It also takes any number of ```PathPlannerWaypoint()``` which are the points the robots travels along and the last paramerter is the name of the Path. The ```PathPlannerWaypoint()``` takes a X-Coordinate, Y-Coordinate, a headding which is the direction the robot will move into the point, and the orientation which is the direction the robot will face in which while traveling to the given point.
 
 ```java
 addTrajectory(

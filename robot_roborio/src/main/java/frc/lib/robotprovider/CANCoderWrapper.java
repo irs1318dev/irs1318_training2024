@@ -9,6 +9,8 @@ public class CANCoderWrapper implements ICANCoder
 
     private final CANcoder wrappedObject;
 
+    private final String cancoderId;
+
     private boolean reverse;
 
     private StatusSignal<Double> position;
@@ -18,12 +20,14 @@ public class CANCoderWrapper implements ICANCoder
     public CANCoderWrapper(int deviceNumber)
     {
         this.wrappedObject = new CANcoder(deviceNumber);
+        this.cancoderId = String.format("CANcoder %d", deviceNumber);
         this.reverse = false;
     }
 
     public CANCoderWrapper(int deviceNumber, String canbus)
     {
         this.wrappedObject = new CANcoder(deviceNumber, canbus);
+        this.cancoderId = String.format("CANcoder %s-%d", canbus, deviceNumber);
         this.reverse = false;
     }
 
@@ -35,7 +39,7 @@ public class CANCoderWrapper implements ICANCoder
         }
 
         this.position.refresh();
-        CTREStatusCodeHelper.printError(this.position.getStatus(), "CANCoderWrapper.getPosition");
+        CTREStatusCodeHelper.printError(this.position.getStatus(), this.cancoderId, "CANCoderWrapper.getPosition");
         return reverse ? -this.position.getValue() : this.position.getValue();
     }
 
@@ -47,7 +51,7 @@ public class CANCoderWrapper implements ICANCoder
         }
 
         this.velocity.refresh();
-        CTREStatusCodeHelper.printError(this.velocity.getStatus(), "CANCoderWrapper.getVelocity");
+        CTREStatusCodeHelper.printError(this.velocity.getStatus(), this.cancoderId, "CANCoderWrapper.getVelocity");
         return reverse ? -this.velocity.getValue() : this.velocity.getValue();
     }
 
@@ -59,7 +63,7 @@ public class CANCoderWrapper implements ICANCoder
         }
 
         this.absolutePosition.refresh();
-        CTREStatusCodeHelper.printError(this.absolutePosition.getStatus(), "CANCoderWrapper.getAbsolutePosition");
+        CTREStatusCodeHelper.printError(this.absolutePosition.getStatus(), this.cancoderId, "CANCoderWrapper.getAbsolutePosition");
         return reverse ? -this.absolutePosition.getValue() : this.absolutePosition.getValue();
     }
 
@@ -67,6 +71,7 @@ public class CANCoderWrapper implements ICANCoder
     {
         CTREStatusCodeHelper.printError(
             this.wrappedObject.setPosition(newPosition, CANCoderWrapper.timeoutSecs),
+            this.cancoderId,
             "CANCoderWrapper.setPosition");
     }
 
